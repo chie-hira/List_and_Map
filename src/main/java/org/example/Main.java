@@ -1,12 +1,14 @@
 package org.example;
 
+import java.io.IOException;
+import java.io.NotActiveException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /* string型のリストを作って例外処理 */
 
         /* Stringをいれてみる */
@@ -36,16 +38,23 @@ public class Main {
             Collections.shuffle(userNames);
 
             /* 最初のメンバーが消える */
-            System.out.println(userNames.get(0) + "さんが消えました。");
-            userNames.remove(0);
-            if (!userNames.isEmpty()) {
-                String message2 = callMember(userNames);
-                System.out.print(message2);
-                System.out.println("の" + userNames.size() + "人になりました。");
-                System.out.println("\r");
-            } else {
-                System.out.println("そして誰もいなくなった。");
-                break;
+            /* 誰もいない状態でエラーが発生する */
+            try {
+//            ここでエラーが発生する
+                System.out.println(userNames.get(0) + "さんが消えました。");
+                userNames.remove(0);
+
+                if (!userNames.isEmpty()) {
+                    String message2 = callMember(userNames);
+                    System.out.print(message2);
+                    System.out.println("の" + userNames.size() + "人になりました。");
+                    System.out.println("\r");
+                } else {
+                    System.out.println("そして誰もいなくなった。");
+//                break;
+                }
+            } catch (Exception e) {
+                System.out.println("エラーが発生しました。");
             }
         }
 
