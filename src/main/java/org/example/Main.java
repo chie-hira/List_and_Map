@@ -3,9 +3,11 @@ package org.example;
 import java.io.IOException;
 import java.io.NotActiveException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -51,12 +53,14 @@ public class Main {
                     System.out.println("\r");
                 } else {
                     System.out.println("そして誰もいなくなった。");
-//                break;
+                    break;
                 }
             } catch (Exception e) {
                 System.out.println("エラーが発生しました。");
             }
         }
+
+        System.out.println('\r');
 
 
         /* クラスを入れてみる */
@@ -75,13 +79,25 @@ public class Main {
         List<User> users = List.of(nakata, satou, urashima, endo);
 
         /* 年齢から何年生まれか判定する */
-        /* 80年代生まれのuserの趣味を出力する */
-//        for (User user : users) {
-//            System.out.println(user.getName());
-//        }
+        /* 80年代生まれのuserの情報を出力する */
+
+        /* 時点を定義する */
+        LocalDate pointTime = LocalDate.of(2023, 1, 1);
+
+        System.out.println("1980年代生まれは" + "\r");
+        for (User user : users) {
+//            int diff = (int) ChronoUnit.YEARS.between(pointTime, user.getBirthday());
+            LocalDate realBirthdayYear = pointTime.minusYears(user.getAge());
+            LocalDate realBirthday = user.getBirthday().withYear(realBirthdayYear.getYear());
+            user.setBirthday(realBirthday);
+//            System.out.println(realBirthday);
+            if (user.getBirthday().isAfter(LocalDate.of(1980, 1, 1)) && user.getBirthday().isBefore(LocalDate.of(1990, 1, 1))) {
+                System.out.println(user.getHobby() + "が趣味の" + user.getName() + "さん");
+            }
+        }
 
         /* クラスをつくってマップに入れて、例外処理 */
-//        hushMapは検索機能に優れている
+//        HashMapは検索機能に優れている
     }
 
     public static String callMember(List<String> userNames) {
