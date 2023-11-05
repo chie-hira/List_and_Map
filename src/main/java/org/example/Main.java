@@ -1,14 +1,11 @@
 package org.example;
 
-import java.io.IOException;
-import java.io.NotActiveException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         /* string型のリストを作って例外処理 */
 
         /* Stringをいれてみる */
@@ -95,7 +92,19 @@ public class Main {
         }
 
         int numberOfPeople = (int) users.stream().filter(item -> item.getBirthday().isAfter(LocalDate.of(1980, 1, 1)) && item.getBirthday().isBefore(LocalDate.of(1990, 1, 1))).count();
-        System.out.println("の" + numberOfPeople + "名");
+        System.out.println("の" + numberOfPeople + "名です" + "\n");
+
+        /* 年齢順にソート */
+        List<User> sortAgeUsers = users.stream().sorted(Comparator.comparing(User::getAge)).toList();
+        sortAgeUsers.stream().forEach(user -> System.out.println(user.getName() + user.getAge()));
+
+        /* 成人が含まれるか判定 */
+        boolean resultAnyMatch = users.stream().anyMatch(user -> user.getAge() >= 20);
+        System.out.println(resultAnyMatch);
+
+        /* 全員が成人か判定 */
+        boolean resultAllMatch = users.stream().allMatch(user -> user.getAge() >= 20);
+        System.out.println(resultAllMatch);
 
         /* クラスをつくってマップに入れて、例外処理 */
 //        HashMap:検索機能に優れている
@@ -111,9 +120,8 @@ public class Main {
 
         if (userMap.containsKey("成人")) {
             List<User> adults = userMap.get("成人");
-            for (User adult : adults) {
-                System.out.println(adult.getName());
-            }
+            System.out.println("成人を出力");
+            adults.stream().map(adult -> adult.getName() + "さん" + adult.getAge() + "歳").forEach(System.out::println);
         }
     }
 
